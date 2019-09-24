@@ -5,10 +5,18 @@ import json
 
 def get_church(church):
     url = f"http://locator.lcms.org/nchurches_frm/{church}"
-    #print(url)
+    
+    
     req = urllib.request.Request(url)
     resp = urllib.request.urlopen(req)
     tree = html.fromstring(resp.read())
+
+    id = church.split("?")[1]
+    if "C" in id:
+        url2 = f"http://locator.lcms.org/nchurches_frm/c_data1.asp?{id}"
+        urllib.request.urlretrieve(url2,"stats\\"+id+".csv")
+
+
 
     name_raw = tree.xpath('//h2/text()')
     address_raw = tree.xpath('//div[@class="gutter"]//p/text()')
@@ -54,14 +62,14 @@ def get_state(state):
     return results
 
 #states = ["AL","AK","AB","AZ","AR","BC","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","MB","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NB","NH","NJ","NM","NY","NF","NC","ND","NT","NS","OH","OK","ON","OR","PA","PE","QC","RI","SK","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","YK"]
-states = ["AL","KY"]
-print("Name,Organized,School,City,State,ZIP")
+states = ["AL"]
 results = {}
 for state in states:
     print(state)
     results[state] = get_state(state)
 
 with open("lcms.csv", "w") as f:
+    f.write("Name,Organized,School,City,State,ZIP\n")
     for state in results:
         for res in results[state]:
             f.write(res+'\n')
