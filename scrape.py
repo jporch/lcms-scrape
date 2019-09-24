@@ -67,8 +67,8 @@ def get_state(state):
         results.append(res)
     return results
 
-#states = ["AL","AK","AB","AZ","AR","BC","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","MB","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NB","NH","NJ","NM","NY","NF","NC","ND","NT","NS","OH","OK","ON","OR","PA","PE","QC","RI","SK","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","YK"]
-states = ["AZ"]
+states = ["AL","AK","AB","AZ","AR","BC","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","MB","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NB","NH","NJ","NM","NY","NF","NC","ND","NT","NS","OH","OK","ON","OR","PA","PE","QC","RI","SK","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","YK"]
+#states = ["AZ"]
 results = {}
 for state in states:
     print(state)
