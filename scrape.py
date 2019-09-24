@@ -1,4 +1,5 @@
 import urllib.request
+from urllib.error import HTTPError
 from lxml import html
 import os
 import time
@@ -15,7 +16,12 @@ def get_church(state,church):
     id = church.split("?")[1]
     if "C" in id:
         url2 = f"http://locator.lcms.org/nchurches_frm/c_data1.asp?{id}"
-        urllib.request.urlretrieve(url2,"stats"+os.path.sep+state+os.path.sep+id+".csv")
+        try:
+            urllib.request.urlretrieve(url2,"stats"+os.path.sep+state+os.path.sep+id+".csv")
+        except HTTPError as e:
+            with open("stats"+os.path.sep+state+os.path.sep+id+".csv","w") as f:
+                f.write("ERROR no stats")
+
 
     name_raw = tree.xpath('//h2/text()')
     address_raw = tree.xpath('//div[@class="gutter"]//p/text()')
@@ -61,8 +67,8 @@ def get_state(state):
         results.append(res)
     return results
 
-states = ["AL","AK","AB","AZ","AR","BC","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","MB","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NB","NH","NJ","NM","NY","NF","NC","ND","NT","NS","OH","OK","ON","OR","PA","PE","QC","RI","SK","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","YK"]
-#states = ["AL"]
+#states = ["AL","AK","AB","AZ","AR","BC","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","MB","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NB","NH","NJ","NM","NY","NF","NC","ND","NT","NS","OH","OK","ON","OR","PA","PE","QC","RI","SK","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","YK"]
+states = ["AZ"]
 results = {}
 for state in states:
     print(state)
