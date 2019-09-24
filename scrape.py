@@ -4,7 +4,7 @@ import os
 import time
 import json
 
-def get_church(church):
+def get_church(state,church):
     url = f"http://locator.lcms.org/nchurches_frm/{church}"
     
     
@@ -15,9 +15,7 @@ def get_church(church):
     id = church.split("?")[1]
     if "C" in id:
         url2 = f"http://locator.lcms.org/nchurches_frm/c_data1.asp?{id}"
-        urllib.request.urlretrieve(url2,"stats"+os.path.sep+id+".csv")
-
-
+        urllib.request.urlretrieve(url2,"stats"+os.path.sep+state+os.path.sep+id+".csv")
 
     name_raw = tree.xpath('//h2/text()')
     address_raw = tree.xpath('//div[@class="gutter"]//p/text()')
@@ -34,9 +32,9 @@ def get_church(church):
         city = str.split(address,',')[1].strip()
         state = str.split(address,',')[2].strip()
         zip = str.split(address,',')[3].strip()
-        return ",".join([name, organized, school, city, state, zip, url])
+        return ",".join([id, name, organized, school, city, state, zip, url])
     else:
-        return ",".join([name, organized, school, address.strip().replace(",","."), "---","---", url])
+        return ",".join([id, name, organized, school, address.strip().replace(",","."), "---","---", url])
 
 
 
@@ -54,10 +52,11 @@ def get_state(state):
     for church in churches_raw:
         if church.attrib['href'] not in churches:
             churches.append(church.attrib['href'])
-    #print(len(churches))
+    if len(churches) > 0 and not os.path.exists("stats"+os.path.sep+state):
+        os.mkdir("stats"+os.path.sep+state)
     results = []
     for church in churches:
-        res = get_church(church)
+        res = get_church(state,church)
         print(res)
         results.append(res)
     return results
@@ -70,7 +69,7 @@ for state in states:
     results[state] = get_state(state)
 
 with open("lcms.csv", "w") as f:
-    f.write("Name,Organized,School,City,State,ZIP\n")
+    f.write("ID,Name,Organized,School,City,State,ZIP\n")
     for state in results:
         for res in results[state]:
             f.write(res+'\n')
