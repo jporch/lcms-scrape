@@ -1,5 +1,6 @@
 import urllib.request
 from lxml import html
+import os
 import time
 import json
 
@@ -14,7 +15,7 @@ def get_church(church):
     id = church.split("?")[1]
     if "C" in id:
         url2 = f"http://locator.lcms.org/nchurches_frm/c_data1.asp?{id}"
-        urllib.request.urlretrieve(url2,"stats\\"+id+".csv")
+        urllib.request.urlretrieve(url2,"stats"+os.path.sep+id+".csv")
 
 
 
